@@ -1,55 +1,76 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Text, ActivityIndicator, View } from 'react-native';
+import { AuthProvider, useAuth } from './src/context/AuthContext';
+
 import HomeScreen from './src/screens/HomeScreen';
 import BinderScreen from './src/screens/BinderScreen';
 import ScanScreen from './src/screens/ScanScreen';
 import NearbyScreen from './src/screens/NearbyScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
+import OnboardingScreen from './src/screens/OnboardingScreen';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function TabNavigator() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: '#0f0f1a' },
+        headerTintColor: '#ffffff',
+        tabBarStyle: {
+          backgroundColor: '#0f0f1a',
+          borderTopColor: '#1a1a2e',
+        },
+        tabBarActiveTintColor: '#7c3aed',
+        tabBarInactiveTintColor: '#555577',
+      }}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} options={{ tabBarIcon: () => <Text>🏠</Text> }} />
+      <Tab.Screen name="Binder" component={BinderScreen} options={{ tabBarIcon: () => <Text>📒</Text> }} />
+      <Tab.Screen name="Scan" component={ScanScreen} options={{ tabBarIcon: () => <Text>📷</Text> }} />
+      <Tab.Screen name="Nearby" component={NearbyScreen} options={{ tabBarIcon: () => <Text>📍</Text> }} />
+      <Tab.Screen name="Profile" component={ProfileScreen} options={{ tabBarIcon: () => <Text>👤</Text> }} />
+    </Tab.Navigator>
+  );
+}
+
+function RootNavigator() {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#0f0f1a', alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator color="#7c3aed" size="large" />
+      </View>
+    );
+  }
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {user ? (
+        <Stack.Screen name="Main" component={TabNavigator} />
+      ) : (
+        <>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+        </>
+      )}
+    </Stack.Navigator>
+  );
+}
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          headerStyle: { backgroundColor: '#0f0f1a' },
-          headerTintColor: '#ffffff',
-          tabBarStyle: {
-            backgroundColor: '#0f0f1a',
-            borderTopColor: '#1a1a2e',
-          },
-          tabBarActiveTintColor: '#7c3aed',
-          tabBarInactiveTintColor: '#555577',
-        }}
-      >
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ tabBarIcon: () => <Text>🏠</Text> }}
-        />
-        <Tab.Screen
-          name="Binder"
-          component={BinderScreen}
-          options={{ tabBarIcon: () => <Text>📒</Text> }}
-        />
-        <Tab.Screen
-          name="Scan"
-          component={ScanScreen}
-          options={{ tabBarIcon: () => <Text>📷</Text> }}
-        />
-        <Tab.Screen
-          name="Nearby"
-          component={NearbyScreen}
-          options={{ tabBarIcon: () => <Text>📍</Text> }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{ tabBarIcon: () => <Text>👤</Text> }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <AuthProvider>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </AuthProvider>
   );
 }
