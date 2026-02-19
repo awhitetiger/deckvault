@@ -19,3 +19,22 @@ Content-Type: application/json
   "email": "test@test.com",
   "password": "password123"
 }
+
+### Search cards
+GET http://localhost:3000/api/v1/cards/search?q=blue-eyes
+
+### Refresh token
+POST http://localhost:3000/api/v1/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "PASTE_REFRESH_TOKEN_HERE"
+}
+
+### Logout
+POST http://localhost:3000/api/v1/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "PASTE_REFRESH_TOKEN_HERE"
+}
