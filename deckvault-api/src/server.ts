@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import dbPlugin from './plugins/db';
 import authRoutes from './routes/auth';
 import cardRoutes from './routes/cards';
+import binderRoutes from './routes/binders';
 import { syncCards } from './services/cardSyncService';
 import { startPriceCron } from './services/priceCron';
 
@@ -15,6 +16,7 @@ server.register(cors, { origin: true });
 server.register(dbPlugin);
 server.register(authRoutes);
 server.register(cardRoutes);
+server.register(binderRoutes);
 
 server.get('/health', async () => {
   return { status: 'ok', timestamp: new Date().toISOString() };

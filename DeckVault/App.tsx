@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text, ActivityIndicator, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 
 import HomeScreen from './src/screens/HomeScreen';
@@ -12,6 +13,9 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
+import CardSearchScreen from './src/screens/CardSearchScreen';
+import CardDetailScreen from './src/screens/CardDetailScreen';
+import BinderSettingsScreen from './src/screens/BinderSettingsScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -20,8 +24,7 @@ function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: '#0f0f1a' },
-        headerTintColor: '#ffffff',
+        headerShown: false,
         tabBarStyle: {
           backgroundColor: '#0f0f1a',
           borderTopColor: '#1a1a2e',
@@ -39,6 +42,34 @@ function TabNavigator() {
   );
 }
 
+function AuthStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function AppStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: '#0f0f1a' },
+        headerTintColor: '#fff',
+        headerBackTitle: 'Back',
+        contentStyle: { backgroundColor: '#0f0f1a' },
+      }}
+    >
+      <Stack.Screen name="Main" component={TabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="CardSearch" component={CardSearchScreen} options={{ title: 'Search Cards' }} />
+      <Stack.Screen name="CardDetail" component={CardDetailScreen} options={{ title: 'Card Detail' }} />
+      <Stack.Screen name="BinderSettings" component={BinderSettingsScreen} options={{ title: 'Binder Settings' }} />
+    </Stack.Navigator>
+  );
+}
+
 function RootNavigator() {
   const { user, isLoading } = useAuth();
 
@@ -50,27 +81,17 @@ function RootNavigator() {
     );
   }
 
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {user ? (
-        <Stack.Screen name="Main" component={TabNavigator} />
-      ) : (
-        <>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-        </>
-      )}
-    </Stack.Navigator>
-  );
+  return user ? <AppStack /> : <AuthStack />;
 }
 
 export default function App() {
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        <RootNavigator />
-      </NavigationContainer>
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }

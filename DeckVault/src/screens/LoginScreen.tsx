@@ -3,6 +3,7 @@ import {
   View, Text, TextInput, TouchableOpacity,
   StyleSheet, ActivityIndicator, Alert
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginScreen({ navigation }: any) {
@@ -27,7 +28,7 @@ export default function LoginScreen({ navigation }: any) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>DeckVault</Text>
       <Text style={styles.subtitle}>Sign in to your account</Text>
 
@@ -60,7 +61,7 @@ export default function LoginScreen({ navigation }: any) {
       <TouchableOpacity onPress={() => navigation.navigate('Register')}>
         <Text style={styles.link}>Don't have an account? Register</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -72,43 +73,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
   },
-  title: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#7c3aed',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#888',
-    marginBottom: 40,
-  },
+  title: { fontSize: 36, fontWeight: 'bold', color: '#7c3aed', marginBottom: 8 },
+  subtitle: { fontSize: 16, color: '#888', marginBottom: 40 },
   input: {
-    width: '100%',
-    backgroundColor: '#1a1a2e',
-    color: '#fff',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#2a2a4a',
+    width: '100%', backgroundColor: '#1a1a2e', color: '#fff',
+    padding: 16, borderRadius: 12, marginBottom: 16, fontSize: 16,
+    borderWidth: 1, borderColor: '#2a2a4a',
   },
   button: {
-    width: '100%',
-    backgroundColor: '#7c3aed',
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginBottom: 16,
+    width: '100%', backgroundColor: '#7c3aed', padding: 16,
+    borderRadius: 12, alignItems: 'center', marginBottom: 16,
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  link: {
-    color: '#7c3aed',
-    fontSize: 14,
-  },
+  buttonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+  link: { color: '#7c3aed', fontSize: 14 },
 });

@@ -38,3 +38,32 @@ Content-Type: application/json
 {
   "refreshToken": "PASTE_REFRESH_TOKEN_HERE"
 }
+
+### Get binders (replace TOKEN with your accessToken from login)
+GET http://localhost:3000/api/v1/binders
+Authorization: Bearer TOKEN
+
+### Create binder
+POST http://localhost:3000/api/v1/binders
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "name": "My Main Binder",
+  "description": "My best cards",
+  "cover_color": "#7c3aed"
+}
+
+### Search cards
+GET http://localhost:3000/api/v1/cards/search?q=dark+magician
+
+### Reorder cards (replace values with real IDs)
+PATCH http://localhost:3000/api/v1/binders/BINDER_ID/reorder
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkY2YyNTM5Zi04ZmJiLTQxMjAtYTRmYi05MzIwNWIwZjczYTkiLCJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWF0IjoxNzcxNDY3NzU0LCJleHAiOjE3NzE0Njg2NTR9.bdB1GrlAs10ZHKZqI6YTWHJgOTonyKbxLp1k9ovNtkc
+Content-Type: application/json
+
+{
+  "cards": [
+    { "id": "BINDER_CARD_ID", "page": 1, "slot": 0 }
+  ]
+}
